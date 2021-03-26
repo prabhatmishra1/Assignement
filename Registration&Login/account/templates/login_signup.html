@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        #id_username,#id_password,#id_password1,#id_password2{
+            display: block;
+            width: 100%;
+            font-size: 1rem;
+            font-weight: 400;
+            line-height: 1.8;
+            color: #707070!important; 
+            background-color: #fff!important;
+            background-clip: padding-box;
+            border: 1px solid #ced4da;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            border-radius: .75rem;
+            transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out
+        }
+        #id_username:focus,#id_password:focus,#id_password1:focus,#id_password2:focus{
+            color: #212529;
+            background-color: #fff;
+            border-color: #86b7fe;
+            outline: 0;
+            box-shadow: 0 0 0 0.25rem rgb(13 110 253 / 25%);
+        }
+    </style>
+    <script type="text/javascript">
+       function login_flip()
+    {
+      let login_Form = document.querySelector('#main_Container');
+      login_Form.setAttribute('style', '-webkit-transition: -webkit-transform 0.9s; transition: transform 0.9s; -moz-transform: scaleX(1); -o-transform: scaleX(1); -webkit-transform:scaleX(1); transform:scaleX(1)');
+      document.querySelector('#form_Row').setAttribute('style', '-webkit-transform:scaleX(1);')
+
+      document.getElementById("form_Row").innerHTML=`
+      <form class="col-md-6 p-4 border rounded" id="loginform" action="{%url 'login'%}" method="POST">
+              {%csrf_token%}
+             <div class="mb-3">
+                <label for="email" class="form-label">{{ login_form.username.label_tag }}</label>
+                {{ login_form.username}}
+              </div>
+              <div class="mb-3">
+                <label for="password" class="form-label">{{ login_form.password.label_tag }}</label>
+                {{ login_form.password }}
+              </div>
+    
+              <div class="d-flex justify-content-around">
+                 <input type="submit" value="Login" class="btn btn-primary">
+                 <input type="button" value="SignUp Here" class="btn btn-secondary" onclick="signup_flip();">
+              </div>
+          </form>`;
+    }
+
+    function signup_flip()
+    {
+      let login_Form = document.querySelector('#main_Container');
+      login_Form.setAttribute('style', '-webkit-transition: -webkit-transform 0.9s; transition: transform 0.9s; -moz-transform: scaleX(-1); -o-transform: scaleX(-1); -webkit-transform:scaleX(-1); transform:scaleX(-1)');
+
+      document.querySelector('#form_Row').setAttribute('style', '-webkit-transform:scaleX(-1);')
+
+      document.getElementById("form_Row").innerHTML=`
+      <form class="col-md-6 p-4 border rounded" id="loginform" action="{%url 'signup' %}" method="POST">
+              {%csrf_token%}
+             <div class="mb-3">
+                <label for="email" class="form-label">{{ signup_form.username.label_tag }}</label>
+                {{ signup_form.username}} {{signup_form.username.help_text}}
+              </div>
+              <div class="mb-3">
+                <label for="password" class="form-label">{{ signup_form.password1.label_tag }}</label>
+                {{ signup_form.password1 }}
+              </div>
+              <div class="mb-3">
+                <label for="password" class="form-label">{{ signup_form.password2.label_tag }}</label>
+                {{ signup_form.password2 }} {{signup_form.password2.help_text}}
+              </div>
+    
+    
+              <div class="d-flex justify-content-around">
+                 <input type="submit" value="Signup" class="btn btn-primary">
+                 <input type="button" value="Login Here" class="btn btn-secondary" onclick="login_flip();">
+              </div>
+          </form>`;
+    }
+  </script>
+    <title>Document</title>
+</head>
+<body>
+
+    <div class="container" id="main_Container">
+        <div class="row justify-content-center mt-5" id="form_Row">
+          <form class="col-md-6 p-4 border rounded" id="loginform" action="{%url 'login'%}" method="POST">
+            {%csrf_token %}
+            {%if error%}
+            <p>{{error}}</p>
+            {%endif%}
+             <div class="mb-3">
+                <label for="email" class="form-label">{{ login_form.username.label_tag }}</label>
+                {{ login_form.username}}
+              </div>
+              <div class="mb-3">
+                <label for="password" class="form-label">{{ login_form.password.label_tag }}</label>
+                {{ login_form.password }}
+              </div>
+    
+              <div class="d-flex justify-content-around">
+                 <input type="submit" value="Login" class="btn btn-primary">
+                 <input type="button" value="SignUp Here" class="btn btn-secondary" onclick="signup_flip();">
+              </div>
+          </form>
+        </div>
+      </div>
+    
+
+
+<!--     
+    <h1>Welcome to the login and signup page</h1>
+
+
+    <hr>
+    <h1>Login:</h1>
+    {% if form.errors %}
+    <p>Your username and password didn't match. Please try again.</p>
+    {% endif %}
+    <form action="{%url 'login'%}" method="POST">
+        {% csrf_token %}
+        <table>
+            <tr>
+                <td>{{ login_form.username.label_tag }}</td>
+                <td>{{ login_form.username }}</td>
+            </tr>
+            <tr>
+                <td>{{ login_form.password.label_tag }}</td>
+                <td>{{ login_form.password }}</td>
+            </tr>
+            </table> 
+    <input type="submit" value="Login">
+    <input type="hidden" name="next" value="{{ next }}">
+    </form>
+
+
+    <hr>
+    <h1>Signup:</h1>
+    <form action="{%url 'signup' %}" method="POST">
+        {% csrf_token %}
+        <table>
+            <tr>
+                <td>{{ signup_form.username.label_tag }}</td>
+                <td>{{ signup_form.username }}</td>
+            </tr>
+            <tr>
+                <td>{{ signup_form.password.label_tag }}</td>
+                <td>{{signup_form.password1 }}</td>
+            </tr>
+            </table> 
+    <input type="submit" value="Login"> -->
+
+</body>
+</html>
